@@ -26,16 +26,29 @@ transcript is plain JSONL that anyone can edit. Sessions persist the
 *conversation* — the skills, subagents, model and goal that produced it are not
 versioned alongside it.
 
-That gap is this repository.
+That gap is this repository. Most of it is closed; the last row is not, and it is
+the one worth being precise about.
 
 | | Agent SDK | This plugin |
 |---|---|---|
 | Branch a session | `fork` | — |
-| Compare two branches | — | `avcs_diff` |
-| Rejoin them | — | `avcs_merge`, with a `--reconcile` seam for goal and trace |
+| Snapshot code, goal, models and trace as one unit | — | `avcs_commit` |
+| Compare two snapshots | — | `avcs_diff`, per dimension |
+| Rejoin two snapshots | — | `avcs_merge`, with a `--reconcile` seam for goal and trace |
 | Refuse to ship a regression | — | `avcs_freeze`, which fails unless the eval passes |
 | Prove a transcript wasn't edited | — | Ed25519-signed commits |
 | Keep the trace past compaction | summarised away | archived by the `PreCompact` hook |
+| **Diff or merge two forked _sessions_** | — | **not yet — [M1](PLAN.md)** |
+
+The unit `avcs_diff` and `avcs_merge` operate on is an **agentvcs commit**, not an
+SDK session. Both work today, and neither will take two session IDs: a session is
+an append-only event log, and the adapter that turns one into something mergeable
+does not exist yet. Two forked sessions do share a prefix, so the common ancestor
+is findable — the open question is what a *conflict* means when both branches are
+conversations that reached different conclusions about the same file.
+
+That adapter is [M1](PLAN.md), it has not started, and it is the reason this
+repository exists rather than a detail of it.
 
 ## Install
 
@@ -56,7 +69,7 @@ ever stops being true.
 | | |
 |---|---|
 | [`plugin/`](plugin/) | The Agent SDK plugin: MCP server + three hooks |
-| [`packages/agentvcs/`](packages/agentvcs/) | The version control itself — 214 tests, no dependencies |
+| [`packages/agentvcs/`](packages/agentvcs/) | The version control itself — `pip install agentvcs`, 220 tests, no dependencies |
 | [`packages/memory/`](packages/memory/) | Structured recall above the SDK's flat `.claude/` memory files. Works; measures no better than naive matching — see [PLAN.md](PLAN.md) |
 | [`demos/robot/`](demos/robot/) | A 2D robot that evolves its own skills, versioned with agentvcs |
 | [`legacy/eat/`](legacy/eat/) | The Evolving Agents Toolkit, 2025. Kept readable; see below |
@@ -100,10 +113,10 @@ Claims here are measured, including the ones that came back flat.
 
 `pip install git+https://github.com/EvolvingAgentsLabs/evolving-agents` no longer
 installs an `evolving_agents` package — this is a monorepo now. Install what you
-want directly:
+want by name:
 
 ```bash
-pip install ./packages/agentvcs
+pip install agentvcs
 ```
 
 The 2025 package sits at `legacy/eat/` with its original `setup.py`, unchanged.

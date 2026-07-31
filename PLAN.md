@@ -83,6 +83,23 @@ been done. Until it is, this is not the part of the repository to sell.
 The repository had no workflows at all. It now runs every suite together on push
 and pull request: 222 tests that had never executed in the same place.
 
+## M4 · Distribution — **ready, one manual step outstanding**
+
+Worth stating as a milestone because its absence was invisible for a year: the
+flagship was never installable. `pip install agentvcs` returned 404 while the
+package had 214 tests, a version number and a release workflow in the repository
+it used to live in. Every reader who wanted to try it had to clone a monorepo
+first, which is most of the distance between this repository's 452 stars and
+agentvcs's one.
+
+`release-agentvcs.yml` builds on a `agentvcs-v*` tag and refuses to publish
+unless the wheel installs into an empty virtualenv, both console scripts start,
+the MCP entrypoint imports, the dashboard's frontend is present in the wheel, and
+pip resolved nothing outside the standard library.
+
+What is not done: the Trusted Publisher has to be registered on PyPI once, by
+hand, by someone with the account. Until then the workflow builds and stops.
+
 ## What is deliberately not planned
 
 **Re-implementing anything the SDK does.** Tools, the loop, permissions,
