@@ -18,13 +18,24 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
     "Topic :: Software Development :: Version Control",
 ]
 dependencies = []  # zero runtime dependencies — stdlib only, auditable by anyone
 
+# agentvcs is a directory of the evolving-agents monorepo, not its own repository.
+# The standalone EvolvingAgentsLabs/agentvcs repo is the pre-monorepo ancestor and
+# no longer receives commits; pointing PyPI at it would send every reader to a
+# stale tree.
 [project.urls]
-Homepage = "https://github.com/EvolvingAgentsLabs/agentvcs"
-Source = "https://github.com/EvolvingAgentsLabs/agentvcs"
+Homepage = "https://github.com/EvolvingAgentsLabs/evolving-agents"
+Source = "https://github.com/EvolvingAgentsLabs/evolving-agents/tree/main/packages/agentvcs"
+Documentation = "https://github.com/EvolvingAgentsLabs/evolving-agents/tree/main/packages/agentvcs/docs"
+Issues = "https://github.com/EvolvingAgentsLabs/evolving-agents/issues"
 
 [project.scripts]
 agentvcs = "agentvcs.cli:main"

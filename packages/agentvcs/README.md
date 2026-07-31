@@ -1,7 +1,7 @@
 # agentvcs
 
 <p align="center">
-  <img src="docs/img/agentvcs.jpg" alt="Two branches diverge and merge, sealed once the eval passes" width="100%">
+  <img src="https://raw.githubusercontent.com/EvolvingAgentsLabs/evolving-agents/main/packages/agentvcs/docs/img/agentvcs.jpg" alt="Two branches diverge and merge, sealed once the eval passes" width="100%">
 </p>
 
 [![CI](https://github.com/EvolvingAgentsLabs/agentvcs/actions/workflows/ci.yml/badge.svg)](https://github.com/EvolvingAgentsLabs/agentvcs/actions/workflows/ci.yml)
@@ -33,7 +33,7 @@ the reasoning behind it.** The agent starts over.
 3. **Reconcile** the agent's run-time line back into your git releases instead of losing it.
 4. **Measure** whether the self-modification is actually improving — not just changing.
 
-It **complements** git — it doesn't replace it ([how it compares](docs/COMPARISON.md)). Git
+It **complements** git — it doesn't replace it ([how it compares](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/COMPARISON.md)). Git
 stays the system of record for what your team designs; agentvcs is the persistent episodic
 memory of what the agent became at run-time.
 
@@ -138,13 +138,13 @@ commit graph, with **no extra LLM calls**:
 The honest scope: these measure a population of variants across time — the object a **version
 control system** owns. Controller/fleet math (throughput control, sampling, scheduling)
 belongs to a live harness and is deliberately *out of scope*. Full derivations, mappings and
-the scope boundary: [`docs/EVOLUTIONARY_DYNAMICS.md`](docs/EVOLUTIONARY_DYNAMICS.md).
+the scope boundary: [`docs/EVOLUTIONARY_DYNAMICS.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/EVOLUTIONARY_DYNAMICS.md).
 
 ## Real demos
 
 Runnable, narrated, and on the web — every number comes from a real `agentvcs eval`, nothing
 faked. **[Live demos ↗](https://evolvingagentslabs.github.io/agentvcs/demos/)** ·
-reproduction guide [`docs/DEMOS.md`](docs/DEMOS.md).
+reproduction guide [`docs/DEMOS.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/DEMOS.md).
 
 - **Business cases — plain English, no math on screen**
   (`bash examples/business-cases/run.sh`). Five everyday situations, each ending in a
@@ -162,7 +162,7 @@ reproduction guide [`docs/DEMOS.md`](docs/DEMOS.md).
 - **The full agent loop** (`bash examples/agent-loop-demo/run.sh`). A simulated autonomous
   agent driving commit → eval → **rollback (with a recorded reason)** → freeze end to end.
 
-More in [`examples/README.md`](examples/README.md).
+More in [`examples/README.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/examples/README.md).
 
 ## Architecture & ecosystem
 
@@ -170,7 +170,7 @@ More in [`examples/README.md`](examples/README.md).
 for maximum auditability and drop-in integration. The data model underneath is a git-style
 content-addressed object store with typed objects (`commit` / `tree` / `goal` / `modelpin` /
 `trace` / `crystal`), a per-commit `fluid ↔ crystallized` state machine, and a three-way
-*semantic* merge over the merge-base ([`docs/SPEC.md`](docs/SPEC.md)). Model pins are
+*semantic* merge over the merge-base ([`docs/SPEC.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/SPEC.md)). Model pins are
 provider-agnostic (Anthropic, Google, Qwen, …); `"auto"` fills the pin from the model that
 actually ran, so it can't drift.
 
@@ -192,15 +192,26 @@ learns the workflow.
 (forge-proof provenance). Every verified `freeze` mints a **Soulbound Token**, building a
 verifiable CV of what the agent has actually proven — reputation that can't be cloned. Fleets
 are selected with DeSoc correlation discounting for maximum diversity. Full vision:
-[`docs/papers/souls-of-silicon.md`](docs/papers/souls-of-silicon.md). A separate opt-in
+[`docs/papers/souls-of-silicon.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/papers/souls-of-silicon.md). A separate opt-in
 **corporate/legal layer** (`agentvcs init --corporate`) adds an audit log and signed human
 approvals for governed deployments.
 
 ## Install
 
 ```bash
-git clone https://github.com/EvolvingAgentsLabs/agentvcs
-cd agentvcs && pip install -e .   # not on PyPI yet
+pip install agentvcs
+```
+
+Zero runtime dependencies — standard library only, with
+[a test](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/tests/test_zero_dependencies.py)
+that walks the AST and fails if that ever stops being true. Nothing is pulled in
+behind you.
+
+From source, inside the monorepo:
+
+```bash
+git clone https://github.com/EvolvingAgentsLabs/evolving-agents
+cd evolving-agents && pip install -e ./packages/agentvcs
 ```
 
 > `avcs` is a built-in shorthand for `agentvcs` — every command works with either name.
@@ -254,13 +265,13 @@ Declare the non-code dimensions in `agent.json`:
 
 - **Demos** — plain-English business stories + the technical companion:
   [live demos](https://evolvingagentslabs.github.io/agentvcs/demos/) ·
-  [`docs/DEMOS.md`](docs/DEMOS.md)
+  [`docs/DEMOS.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/DEMOS.md)
 - **The math & models** — derivations, mappings, scope boundary:
-  [`docs/EVOLUTIONARY_DYNAMICS.md`](docs/EVOLUTIONARY_DYNAMICS.md)
+  [`docs/EVOLUTIONARY_DYNAMICS.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/EVOLUTIONARY_DYNAMICS.md)
 - **How it compares** — next to git, LangSmith/Langfuse and MLflow/W&B, and what it is *not*:
-  [`docs/COMPARISON.md`](docs/COMPARISON.md)
-- **Tutorial / Spec / Agent contract** — [`docs/TUTORIAL.md`](docs/TUTORIAL.md) ·
-  [`docs/SPEC.md`](docs/SPEC.md) · [`docs/AGENT_MODE.md`](docs/AGENT_MODE.md)
+  [`docs/COMPARISON.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/COMPARISON.md)
+- **Tutorial / Spec / Agent contract** — [`docs/TUTORIAL.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/TUTORIAL.md) ·
+  [`docs/SPEC.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/SPEC.md) · [`docs/AGENT_MODE.md`](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/docs/AGENT_MODE.md)
 
 ## Scope
 
@@ -280,4 +291,4 @@ store has 5. 212 tests pass across Python 3.10–3.13.
 
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE).
+Apache-2.0. See [LICENSE](https://github.com/EvolvingAgentsLabs/evolving-agents/blob/main/packages/agentvcs/LICENSE).

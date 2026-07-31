@@ -1,0 +1,109 @@
+name: release-agentvcs
+
+# agentvcs was written, tested to 214 tests, given a release workflow and a
+# version number — and never published. `pip install agentvcs` returned 404 for
+# its entire life, which means the flagship of this organisation could not be
+# used by anyone who was not willing to clone a monorepo first.
+#
+# Publishing is therefore gated on the one thing a `twine check` does not prove:
+# that the artefact installs into an empty environment and the CLI actually
+# starts. The package claims zero runtime dependencies, so "installs with
+# nothing" is a property to enforce at release time, not a hope.
+#
+# Trigger by pushing a tag that names the package, because this is a monorepo
+# and packages/memory will want its own tag series later:
+#
+#     git tag agentvcs-v0.3.0 && git push origin agentvcs-v0.3.0
+
+on:
+  push:
+    tags: ["agentvcs-v*"]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Where to publish"
+        required: true
+        default: testpypi
+        type: choice
+        options: [testpypi, pypi]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/agentvcs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build
+        run: |
+          pip install build twine
+          python -m build
+
+      - name: The tag must agree with the manifest
+        # A tag that says 0.4.0 over a pyproject that says 0.3.0 publishes 0.3.0
+        # under a release note for 0.4.0, and PyPI will not let you take it back.
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          manifest=$(python -c "import tomllib,pathlib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")
+          tagged="${GITHUB_REF_NAME#agentvcs-v}"
+          test "$manifest" = "$tagged" || {
+            echo "::error::tag $GITHUB_REF_NAME declares $tagged, pyproject declares $manifest"
+            exit 1
+          }
+
+      - name: Metadata renders on PyPI
+        run: twine check --strict dist/*
+
+      - name: The wheel installs into an empty environment and runs
+        # Not `pip install -e .` from the source tree: that quietly works even
+        # when the wheel is missing a data file. `agentvcs ui` shipped without
+        # its frontend once for exactly this reason.
+        run: |
+          python -m venv /tmp/clean
+          /tmp/clean/bin/pip install dist/*.whl
+          /tmp/clean/bin/agentvcs --version
+          /tmp/clean/bin/avcs --help > /dev/null
+          /tmp/clean/bin/python - <<'PY'
+          import importlib.resources as res
+          from agentvcs import mcp_server  # the MCP entrypoint the plugin spawns
+          assert res.files("agentvcs").joinpath("ui/index.html").is_file(), \
+              "the dashboard shipped without its single-page app"
+          print("clean install OK")
+          PY
+
+      - name: Nothing but the standard library came along
+        # The zero-dependency claim, checked against what pip actually resolved
+        # rather than against what pyproject.toml says.
+        run: |
+          installed=$(/tmp/clean/bin/pip list --format=freeze --exclude agentvcs \
+                      --exclude pip --exclude setuptools --exclude wheel)
+          test -z "$installed" || { echo "::error::pulled in: $installed"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: packages/agentvcs/dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    # Trusted Publishing: PyPI verifies this workflow's OIDC identity, so there
+    # is no API token in the repository to leak or rotate.
+    permissions:
+      id-token: write
+    environment:
+      name: ${{ (github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi') && 'testpypi' || 'pypi' }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+          repository-url: ${{ (github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi') && 'https://test.pypi.org/legacy/' || '' }}
