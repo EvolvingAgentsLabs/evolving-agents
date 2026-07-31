@@ -17,13 +17,27 @@ organisation:
 These read the manifest and the README as data. They do not build a wheel; the
 release workflow does that, and additionally installs it into an empty
 environment before it is allowed to publish.
+
+Reading the manifest needs `tomllib`, which is standard library only from 3.11.
+The package supports 3.10, so on that interpreter this module skips rather than
+grow a dependency for a metadata check. The CI matrix runs 3.10, 3.12 and 3.13
+against the same files, and the release workflow builds on 3.12 — so the
+properties below are still enforced on every push. What is lost on 3.10 is a
+duplicate run, not coverage.
 """
 
 from __future__ import annotations
 
 import re
-import tomllib
+import sys
 from pathlib import Path
+
+import pytest
+
+if sys.version_info < (3, 11):  # pragma: no cover - exercised by the 3.10 CI leg
+    pytest.skip("tomllib is stdlib from 3.11; checked on the 3.12 and 3.13 legs", allow_module_level=True)
+
+import tomllib
 
 PACKAGE = Path(__file__).resolve().parent.parent
 PYPROJECT = tomllib.loads((PACKAGE / "pyproject.toml").read_text(encoding="utf-8"))
