@@ -1,4 +1,35 @@
-# Plan
+# Plan — closed 2026-08-01
+
+**This plan is finished, not paused.** The repository is frozen; the work below
+either shipped or moved to [ai-os](https://github.com/EvolvingAgentsLabs/ai-os).
+
+Where each milestone ended:
+
+| | | |
+|---|---|---|
+| M0 · Bet on the SDK | **done** | Stands as written |
+| M1 · Merge across sessions | **moved to ai-os** | See below |
+| M2 · Structured memory | **measured flat** | Idea continues as `ai-storage` in ai-os |
+| M3 · CI | **done** | |
+| M4 · Distribution | **not done** | `agentvcs` was never published; PyPI's Trusted Publisher was never registered, so `pip install agentvcs` returns 404. Install from source |
+
+**On M1, honestly.** It was described here as "the reason this repo exists", and
+it never started. The diagnosis in it was right and is worth keeping: two forked
+sessions share a prefix, so finding the common ancestor is not the problem —
+deciding what a *conflict* is when both branches are conversations is.
+
+What was wrong was the substrate. An SDK session is an append-only event log with
+no declared goal and no parent pointer, so there is nothing to merge *onto*. In
+ai-os the unit of work is a flow — a persisted object that records
+`forkedFrom { flowId, atStep }` from its first commit — and diff comes before
+merge because diff stands alone.
+
+Read [`doc/03-ai-flows.md`](https://github.com/EvolvingAgentsLabs/ai-os/blob/main/doc/03-ai-flows.md)
+in ai-os. The original text of all four milestones follows, unedited.
+
+---
+
+# Plan (original, 2026-07-29)
 
 Four milestones. Two are done, one is blocked on a measurement that came back
 flat, and the one that justifies the repository has not started.

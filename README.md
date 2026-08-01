@@ -1,3 +1,14 @@
+> **FROZEN — 2026-08-01.** Not under development. This repository is kept
+> because it is still true, not because it is maintained.
+>
+> The idea that justified it — versioning an agent's evolution so two branches
+> of work can be compared and rejoined — is carried forward in
+> **[ai-os](https://github.com/EvolvingAgentsLabs/ai-os)**, the organisation's
+> active project, as flow lineage. See
+> [`doc/03-ai-flows.md`](https://github.com/EvolvingAgentsLabs/ai-os/blob/main/doc/03-ai-flows.md).
+>
+> Last verified: 2026-08-01.
+
 # Evolving Agents
 
 <p align="center">
@@ -69,7 +80,7 @@ ever stops being true.
 | | |
 |---|---|
 | [`plugin/`](plugin/) | The Agent SDK plugin: MCP server + three hooks |
-| [`packages/agentvcs/`](packages/agentvcs/) | The version control itself — `pip install agentvcs`, 220 tests, no dependencies |
+| [`packages/agentvcs/`](packages/agentvcs/) | The version control itself — 220 tests, no dependencies. **Not on PyPI**; install from source |
 | [`packages/memory/`](packages/memory/) | Structured recall above the SDK's flat `.claude/` memory files. Works; measures no better than naive matching — see [PLAN.md](PLAN.md) |
 | [`demos/robot/`](demos/robot/) | A 2D robot that evolves its own skills, versioned with agentvcs |
 | [`legacy/eat/`](legacy/eat/) | The Evolving Agents Toolkit, 2025. Kept readable; see below |
@@ -115,8 +126,12 @@ Claims here are measured, including the ones that came back flat.
 installs an `evolving_agents` package — this is a monorepo now. Install what you
 want by name:
 
+`agentvcs` was never published to PyPI — the release workflow exists but its
+Trusted Publisher was never registered, so `pip install agentvcs` returns 404.
+Install from source:
+
 ```bash
-pip install agentvcs
+pip install "git+https://github.com/EvolvingAgentsLabs/evolving-agents#subdirectory=packages/agentvcs"
 ```
 
 The 2025 package sits at `legacy/eat/` with its original `setup.py`, unchanged.
