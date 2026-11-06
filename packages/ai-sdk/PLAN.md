@@ -1,7 +1,15 @@
 # The director for the Vercel AI SDK: plan
 
-**Status:** plan, 2026-11-06. Nothing below is built yet. Every claim a phase makes is marked **[ran]** only once it
-has run.
+**Status, 2026-11-06:** E0 and E1 built (#207). The E3 code is also built: the middleware, the skills for
+`HarnessAgent`, the bench on Vercel Sandbox and its report, all tested against a scripted model. Nothing has been
+measured on a real model yet: E2 ([BRIEF-E2](../director/docs/BRIEF-E2.md)) waits for the Gateway and Sandbox
+credentials. Every claim a phase makes is marked **[ran]** only once it has run.
+
+**Found while building it [read]:** AI SDK 7 ships `HarnessAgent`. It runs Claude Code, Codex, OpenCode, Cursor,
+Copilot, Pi and others in a sandbox, and accepts `skills` (name, description, content). The SDK gives teams the runtime
+and the slot for skills, but nothing decides which skills a request needs, where they come from, whether they help a
+given harness and model, or how they improve after a correction. That is the layer this package fills, so a page of
+the memory is also a `HarnessAgent` skill (`skillsFor(memory, request)`).
 
 ## What it is
 
@@ -30,7 +38,7 @@ The question it answers is the one teams actually pay for:
 |---|---|---|
 | Memory as linked statements, a version per change, revert | the director's pages and gate | `memory`: markdown in `.director/` inside the repo, shared by the team through git |
 | Find the statements a request needs | the director's walk | `find`: a lexical router, with an optional router on a decision model (`experimental_decide`), each measured before it is trusted |
-| Put the know-how in front of the model | the plugin's hooks | `withDirector(model)`: AI SDK middleware, plus an MCP server for any MCP client |
+| Put the know-how in front of the model | the plugin's hooks | `withDirector(model)`: AI SDK middleware; `skillsFor(memory, request)`: the same pages as `HarnessAgent` skills; later, an MCP server for any MCP client |
 | Learn from a correction, only with a yes | the gated lesson | `learn`: drafts a statement from the correction and checks it against the existing ones; nothing is kept without approval |
 | A verdict from the result itself | the briefs' judges | `bench`: the same task on several Gateway models, with and without the know-how, checked by the case's own `check` script |
 | What each piece and each model brings | — | `ledger` + `report`: tasks, verdicts, time, tokens and cost per statement and per model; the cheapest model that matches the best |

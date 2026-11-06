@@ -1,0 +1,6 @@
+{
+  "title": "Release the greet package",
+  "domain": "code",
+  "when": "releasing a new version of the greet Python package: version bump, changelog entry, test, commit and tag",
+  "request": "Release 0.3.0 with a new name_upper option for greet() that uppercases the name."
+}
