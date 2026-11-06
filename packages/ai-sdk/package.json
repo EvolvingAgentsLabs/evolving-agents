@@ -1,0 +1,20 @@
+{
+  "name": "@evolvingagents/director",
+  "version": "0.0.1",
+  "description": "Your team's know-how for Vercel AI SDK agents: linked statements, a router, and a bench that finds the cheapest model that does your task right.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "repository": { "type": "git", "url": "https://github.com/EvolvingAgentsLabs/evolving-agents", "directory": "packages/ai-sdk" },
+  "engines": { "node": ">=22.18" },
+  "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test 'test/**/*.test.ts'"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0"
+  }
+}
