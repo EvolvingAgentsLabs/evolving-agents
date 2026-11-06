@@ -4,17 +4,43 @@
   "description": "Your team's know-how for Vercel AI SDK agents: linked statements, a router, and a bench that finds the cheapest model that does your task right.",
   "license": "Apache-2.0",
   "type": "module",
-  "repository": { "type": "git", "url": "https://github.com/EvolvingAgentsLabs/evolving-agents", "directory": "packages/ai-sdk" },
-  "engines": { "node": ">=22.18" },
-  "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
-  "files": ["dist"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EvolvingAgentsLabs/evolving-agents",
+    "directory": "packages/ai-sdk"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "node --test 'test/**/*.test.ts'"
+    "test": "node --test 'test/**/*.test.ts'",
+    "director": "node src/cli.ts"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "ai": "^7.0.164",
     "typescript": "^5.9.0"
+  },
+  "dependencies": {
+    "zod": "^4.6.7",
+    "@vercel/sandbox": "^3.9.1",
+    "@ai-sdk/sandbox-vercel": "^1.0.175"
+  },
+  "bin": {
+    "director": "./dist/cli.js"
+  },
+  "peerDependencies": {
+    "ai": "^7.0.0"
   }
 }
