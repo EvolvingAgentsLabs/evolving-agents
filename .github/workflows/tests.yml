@@ -56,6 +56,27 @@ jobs:
       - run: python -m pytest tests -q
         working-directory: packages/director
 
+  ai-sdk:
+    # packages/ai-sdk: the director for the Vercel AI SDK, in TypeScript. Tests run on Node's own type stripping, so
+    # the oldest Node that has it unflagged (22.18) is in the matrix; the build must also compile cleanly.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22.18", "24"]
+    defaults:
+      run:
+        working-directory: packages/ai-sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
   memory:
     runs-on: ubuntu-latest
     steps:
