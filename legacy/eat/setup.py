@@ -13,7 +13,7 @@ setup(
     long_description=long_desc,
     long_description_content_type="text/markdown",
     author="Matias Molinas",
-    author_email="matias.molinas@gmail.com",
+    author_email="2717406+matiasmolinas@users.noreply.github.com",
     url="https://github.com/matiasmolinas/evolving-agents-framework",
     packages=find_packages(exclude=["examples", "tests", "docs"]),
     include_package_data=True,

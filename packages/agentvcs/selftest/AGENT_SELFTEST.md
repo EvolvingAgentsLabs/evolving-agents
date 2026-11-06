@@ -40,7 +40,7 @@ in section [1] measure whatever you've actually done this session.
 you. If you ever invoke it by hand, the form is:
 
 ```bash
-PYTHONPATH=/Users/agustinazwiener/evolvingagents/agentvcs/src python3.12 -m agentvcs.cli <command>
+PYTHONPATH=/path/to/agentvcs/src python3.12 -m agentvcs.cli <command>
 ```
 
 ## Step 1 — run the harness
@@ -83,7 +83,7 @@ not a failure.
 The harness does this in a sandbox, but you can feel it directly:
 
 ```bash
-A() { PYTHONPATH=/Users/agustinazwiener/evolvingagents/agentvcs/src python3.12 -m agentvcs.cli "$@"; }
+A() { PYTHONPATH=/path/to/agentvcs/src python3.12 -m agentvcs.cli "$@"; }
 cd selftest/.sandbox/evalgate
 A show              # see the eval verdict + crystal on the verified commit
 A recall "add"      # the verified recipe comes back, flagged ✓verified
